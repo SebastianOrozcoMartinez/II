@@ -1,0 +1,3 @@
+- [] update the description of getKey, ii.py line 16.
+- [] update the names of the variables on readcols, ii.py line 53.
+- [] translate comments on the "while 1:" loop, ii.py line 80.
