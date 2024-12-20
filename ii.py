@@ -1,8 +1,7 @@
 '''
 II V0.3
-Este código está hecho para poder identificar distintas personas
-a traves de codigos de identificación y para registrarlos en una
-base de datos en forma de lista de asistencia
+This code helps identifing difrent people using UIDs (Unique Identificator Device)
+and saving his assistant in a Excel file
 '''
 
 # initialize variables and import libraries
@@ -72,8 +71,8 @@ def readRows(row,hoja):
 
 # Saves student data:
 UIDs = readCols('B',data)    # UID
-Alumnos = readCols('A',data) # Student
-Grados = readCols('C',data)   # Classroom
+students = readCols('A',data) # Student
+classroom = readCols('C',data)   # Classroom
 entrada = int(config['B1'].value) # Searches for the check-in time
 ######### Other code
 
@@ -81,12 +80,12 @@ while 1: # Infinite loop
     
     # Takes the UID and then checks if its on the list
     print('Introduce el UID')    
-    alumno = interdicc(UIDs,Alumnos,'A',input())
-    if alumno == 'None':
+    student = interdicc(UIDs,students,'A',input())
+    if student == 'None':
         print('No se encontro el UID ⚠️')
         continue
     # Search for the classroom of the student
-    grado = interdicc(Alumnos, Grados, 'C', alumno)
+    grado = interdicc(students, classroom, 'C', student)
     if grado == '1A':
         grado = '1ero A'
         sheet = wb['1ero A']
@@ -99,20 +98,20 @@ while 1: # Infinite loop
     elif grado == '3':
         grado = '3er'
         sheet = wb['3ero']
-    # Checks and compares the actual time with the 
+    # Checks and compares the actual time with the check-in time 
     asistencia = False
     tiempoActual = time.localtime()
     localTime = tiempoActual.tm_hour
     if localTime >= entrada:
-        print(f'El alumno {alumno} de {grado} llegó tarde')
+        print(f'El student {student} de {grado} llegó tarde')
         asistencia = False
     else:
-        print(f'El alumno {alumno} de {grado} llegó temprano')
+        print(f'El student {student} de {grado} llegó temprano')
         asistencia = True
 
     # Assistance is recorded
-    Alumnos_por_grado = readCols('A',sheet)
-    row = Alumnos_por_grado.get(alumno)
+    students_por_grado = readCols('A',sheet)
+    row = students_por_grado.get(student)
     print(row)
     contador = 1
     for i in row:
