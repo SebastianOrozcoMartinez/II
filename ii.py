@@ -86,18 +86,7 @@ while 1: # Infinite loop
         continue
     # Search for the classroom of the student
     grado = interdicc(students, classroom, 'C', student)
-    if grado == '1A':
-        grado = '1ero A'
-        sheet = wb['1ero A']
-    elif grado == '1B':
-        grado = '1ero B'
-        sheet = wb['1ero B']
-    elif grado == '2':
-        grado = '2do'
-        sheet = wb['2do']
-    elif grado == '3':
-        grado = '3er'
-        sheet = wb['3ero']
+    sheet = wb[grado]
     # Checks and compares the actual time with the check-in time 
     asistencia = False
     tiempoActual = time.localtime()
