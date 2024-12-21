@@ -83,14 +83,18 @@ entrada = int(config['B1'].value) # Searches for the check-in time
 
 while 1: # Infinite loop
     # Searches for a PICC
-    uid = pn532.read_passive_target()
-    if uid is not None:
-        print("Tarjeta detectada con UID:", [hex(i) for i in uid])
-        time.sleep(1)
+    print("Aproxima una tarjeta")
+    uid = None
+    while uid is None:
+        uid = pn532.read_passive_target()
+        if uid is not None:
+            uid = "".join([hex(i) for i in uid])
+            uid = regex.sub(r'0x', ':', uid).replace(":","",1).upper()
+            print(uid)
+            time.sleep(0.5)
     
     # Takes the UID and then checks if its on the list
-    print('Introduce el UID')    
-    student = interdicc(UIDs,students,'A',input())
+    student = interdicc(UIDs,students,'A',uid)
     if student == 'None':
         print('No se encontro el UID ⚠️')
         continue
@@ -102,10 +106,10 @@ while 1: # Infinite loop
     elif grado == '1B':
         grado = '1ero B'
         sheet = wb['1ero B']
-    elif grado == '2':
+    elif grado == '2do':
         grado = '2do'
         sheet = wb['2do']
-    elif grado == '3':
+    elif grado == '3ro':
         grado = '3er'
         sheet = wb['3ero']
     # Checks and compares the actual time with the check-in time 
@@ -113,10 +117,10 @@ while 1: # Infinite loop
     tiempoActual = time.localtime()
     localTime = tiempoActual.tm_hour
     if localTime >= entrada:
-        print(f'El student {student} de {grado} llegó tarde')
+        print(f'El alumno {student} de {grado} llegó tarde')
         asistencia = False
     else:
-        print(f'El student {student} de {grado} llegó temprano')
+        print(f'El alumno {student} de {grado} llegó temprano')
         asistencia = True
 
     # Assistance is recorded
