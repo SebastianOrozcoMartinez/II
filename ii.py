@@ -110,11 +110,11 @@ while 1: # Infinite loop
     else:
         print(f'El alumno {student} de {grado} llegó temprano')
         asistencia = True
-
+    ### WARNDING: ❗ THE NEXT CODE DOESNT WORK ALREADY ❗ ###
     # Assistance is recorded
     students_por_grado = readCols('A',sheet)
     row = students_por_grado.get(student)
-    print(row)
+    print("row",row)
     contador = 1
     for i in row:
         if i != 'None':
