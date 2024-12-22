@@ -6,10 +6,14 @@ and saving his assistant in a Excel file
 
 # initialize variables and import libraries
 from openpyxl import load_workbook
-import time, regex
+from adafruit_pn532.i2c import PN532_I2C
+import time, regex, board, busio
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
 config = wb['Ajustes']
+# Start I2C
+i2c = busio.I2C(board.SCL, board.SDA)
+pn532 = PN532_I2C(i2c)  # No se necesita especificar la dirección
 
 
 def getKey(diccionario: dict, valor_buscado: str): #GPT
@@ -77,10 +81,19 @@ entrada = int(config['B1'].value) # Searches for the check-in time
 ######### Other code
 
 while 1: # Infinite loop
+    # Searches for a PICC
+    print("Aproxima una tarjeta")
+    uid = None
+    while uid is None:
+        uid = pn532.read_passive_target()
+        if uid is not None:
+            uid = "".join([hex(i) for i in uid])
+            uid = regex.sub(r'0x', ':', uid).replace(":","",1).upper()
+            print(uid)
+            time.sleep(0.5)
     
     # Takes the UID and then checks if its on the list
-    print('Introduce el UID')    
-    student = interdicc(UIDs,students,'A',input())
+    student = interdicc(UIDs,students,'A',uid)
     if student == 'None':
         print('No se encontro el UID ⚠️')
         continue
@@ -92,10 +105,10 @@ while 1: # Infinite loop
     tiempoActual = time.localtime()
     localTime = tiempoActual.tm_hour
     if localTime >= entrada:
-        print(f'El student {student} de {grado} llegó tarde')
+        print(f'El alumno {student} de {grado} llegó tarde')
         asistencia = False
     else:
-        print(f'El student {student} de {grado} llegó temprano')
+        print(f'El alumno {student} de {grado} llegó temprano')
         asistencia = True
 
     # Assistance is recorded
