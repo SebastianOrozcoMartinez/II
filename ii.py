@@ -72,6 +72,10 @@ def readRows(row,hoja):
         celda = hoja[contador].value
         list.append(str(celda))
     return list
+class student():
+    def __init__(self, name, uid, classroom):
+        pass
+
 
 # Saves student data:
 UIDs = readCols('B',data)    # UID
