@@ -7,7 +7,7 @@ and saving his assistant in a Excel file
 # initialize variables and import libraries
 from openpyxl import load_workbook
 from adafruit_pn532.i2c import PN532_I2C
-import time, regex, board, busio
+import time, regex, board, busio, students
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
 config = wb['Ajustes']
@@ -72,9 +72,11 @@ def readRows(row,hoja):
         celda = hoja[contador].value
         list.append(str(celda))
     return list
-class student():
-    def __init__(self, name, uid, classroom):
-        pass
+class student:
+    def __init__(self, name: str, uid: str, classroom: str):
+        self.name = name
+        self.uid = uid
+        self.classroom = classroom
 
 
 # Saves student data:
