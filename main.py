@@ -85,7 +85,6 @@ students = readCols('A',data) # Student
 classroom = readCols('C',data)   # Classroom
 entrada = int(config['B1'].value) # Searches for the check-in time
 ######### Other code
-print(studentsList.studentList)
 while 1: # Infinite loop
     # Searches for a PICC
     print("Aproxima una tarjeta")
@@ -99,12 +98,12 @@ while 1: # Infinite loop
             time.sleep(0.5)
     
     # Takes the UID and then checks if its on the list
-    student = interdicc(UIDs,students,'A',uid)
+    student = studentsList.studentList.get(uid).name
     if student == 'None':
         print('No se encontro el UID ⚠️')
         continue
     # Search for the classroom of the student
-    grado = interdicc(students, classroom, 'C', student)
+    grado = studentsList.studentList.get(uid).classroom
     sheet = wb[grado]
     # Checks and compares the actual time with the check-in time 
     asistencia = False
