@@ -7,7 +7,7 @@ and saving his assistant in a Excel file
 # initialize variables and import libraries
 from openpyxl import load_workbook
 from adafruit_pn532.i2c import PN532_I2C
-import time, regex, board, busio, students
+import time, regex, board, busio, studentsList
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
 config = wb['Ajustes']
@@ -85,7 +85,7 @@ students = readCols('A',data) # Student
 classroom = readCols('C',data)   # Classroom
 entrada = int(config['B1'].value) # Searches for the check-in time
 ######### Other code
-
+print(studentsList.studentList)
 while 1: # Infinite loop
     # Searches for a PICC
     print("Aproxima una tarjeta")
