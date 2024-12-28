@@ -11,9 +11,9 @@ import time, regex, board, busio, studentsList
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
 config = wb['Ajustes']
-# Start I2C
-i2c = busio.I2C(board.SCL, board.SDA)
-pn532 = PN532_I2C(i2c)  # No se necesita especificar la dirección
+# Start I2C (Uncomment)
+# i2c = busio.I2C(board.SCL, board.SDA)
+# pn532 = PN532_I2C(i2c)
 
 
 def getKey(diccionario: dict, valor_buscado: str): #GPT
@@ -88,7 +88,8 @@ entrada = int(config['B1'].value) # Searches for the check-in time
 while 1: # Infinite loop
     # Searches for a PICC
     print("Aproxima una tarjeta")
-    uid = None
+    uid = "23:E3:71:F7"
+    '''
     while uid is None:
         uid = pn532.read_passive_target()
         if uid is not None:
@@ -96,7 +97,7 @@ while 1: # Infinite loop
             uid = regex.sub(r'0x', ':', uid).replace(":","",1).upper()
             print(uid)
             time.sleep(0.5)
-    
+    '''
     # Takes the UID and then checks if its on the list
     student = studentsList.studentList.get(uid).name
     if student == 'None':
