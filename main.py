@@ -6,12 +6,12 @@ and saving his assistant in a Excel file
 
 # initialize variables and import libraries
 from openpyxl import load_workbook
-from adafruit_pn532.i2c import PN532_I2C
-import time, regex, board, busio, studentsList
+# from adafruit_pn532.i2c import PN532_I2C
+import time, regex, studentsList#, board, busio
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
 config = wb['Ajustes']
-# Start I2C (Uncomment)
+# Start I2C
 # i2c = busio.I2C(board.SCL, board.SDA)
 # pn532 = PN532_I2C(i2c)
 
@@ -88,7 +88,7 @@ entrada = int(config['B1'].value) # Searches for the check-in time
 while 1: # Infinite loop
     # Searches for a PICC
     print("Aproxima una tarjeta")
-    uid = "23:E3:71:F7"
+    uid = "23:E3:71:F7" #Debugging
     '''
     while uid is None:
         uid = pn532.read_passive_target()
