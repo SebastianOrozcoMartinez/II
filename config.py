@@ -3,6 +3,7 @@ class student:
         self.name = name
         self.uid = uid
         self.classroom = classroom
+entrada = 7
 studentList = {
     "23:E3:71:F7" : student("Pepito","23:E3:71:F7","2do"),
     "456" : student("Juan","456","3ro"),
