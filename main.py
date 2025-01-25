@@ -7,35 +7,18 @@ and saving his assistant in a Excel file
 # initialize variables and import libraries
 from openpyxl import load_workbook
 # from adafruit_pn532.i2c import PN532_I2C
-import time, regex, studentsList#, board, busio
+import time, re, config#, board, busio
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
-config = wb['Ajustes']
+config_sheet = wb['Ajustes']
 # Start I2C
 # i2c = busio.I2C(board.SCL, board.SDA)
 # pn532 = PN532_I2C(i2c)
 
 
-def getKey(diccionario: dict, valor_buscado: str): #GPT
-    # Finds all the keys
-    claves_encontradas = []
-    for clave, valor in diccionario.items():
-        if valor == valor_buscado:
-            claves_encontradas.append(clave)
-    return ''.join(claves_encontradas)
-def interdicc(dicc1: dict,dicc2: dict,column,searched: str):
-    x = dicc1.get(searched)
-    if x == None:
-        return 'None'
-    num = regex.findall('\d',x)
-    if dicc2.get(num[0]) != 'None':
-        y = getKey(dicc2,f'{column}{num[0]}')
-    else:
-        y = 'Nop'
-    return y
 def numToCol(num):
-# This function turns any number to a excel column
-# Example: Input: 1 Output: A, Input: 4 Output: D
+    # This function turns any number to a excel column
+    # Example: Input: 1 Output: A, Input: 4 Output: D
     Alphabet = {
         1 : 'A', 2 : 'B', 3 : 'C',
         4 : 'D', 5 : 'E', 6 : 'F',
@@ -64,31 +47,12 @@ def readCols(col,hoja):
         lista2.append(contador)
         lista.append(str(celda))
     return dict(zip(lista, lista2))
-def readRows(row,hoja):
-# Its in development, its readCols() but for rows
-    list = []
-    for i in []:
-        contador = (f"{i}{row}")
-        celda = hoja[contador].value
-        list.append(str(celda))
-    return list
-class student:
-    def __init__(self, name: str, uid: str, classroom: str):
-        self.name = name
-        self.uid = uid
-        self.classroom = classroom
 
-
-# Saves student data:
-UIDs = readCols('B',data)    # UID
-students = readCols('A',data) # Student
-classroom = readCols('C',data)   # Classroom
-entrada = int(config['B1'].value) # Searches for the check-in time
 ######### Other code
 while 1: # Infinite loop
     # Searches for a PICC
     print("Aproxima una tarjeta")
-    uid = "23:E3:71:F7" #Debugging
+    uid = "4:C0:64:B2:5B:13:90" #Debugging
     '''
     while uid is None:
         uid = pn532.read_passive_target()
@@ -99,18 +63,18 @@ while 1: # Infinite loop
             time.sleep(0.5)
     '''
     # Takes the UID and then checks if its on the list
-    student = studentsList.studentList.get(uid).name
+    student = config.studentList.get(uid).name
     if student == 'None':
         print('No se encontro el UID ⚠️')
         continue
     # Search for the classroom of the student
-    grado = studentsList.studentList.get(uid).classroom
+    grado = config.studentList.get(uid).classroom
     sheet = wb[grado]
     # Checks and compares the actual time with the check-in time 
     asistencia = False
     tiempoActual = time.localtime()
     localTime = tiempoActual.tm_hour
-    if localTime >= entrada:
+    if localTime >= config.entrada:
         print(f'El alumno {student} de {grado} llegó tarde')
         asistencia = False
     else:
@@ -120,17 +84,20 @@ while 1: # Infinite loop
     # Assistance is recorded
     students_por_grado = readCols('A',sheet)
     row = students_por_grado.get(student)
-    print("row",row)
     contador = 1
+    row = row[1:]
     for i in row:
         if i != 'None':
             contador = contador + 1
     word = numToCol(contador)[0]
     if asistencia == True:
         sheet[f'{word}{row}'] = 'O'
+        print(f'{word}{row}')
     else:
         sheet[f'{word}{row}'] = 'X'
+        print(f'{word}{row}')
 
-    #Save changes
+    # Save changes
     wb.save('ii.xlsx')
     print('Se ha registrado la asistencia')
+    break
