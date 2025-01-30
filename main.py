@@ -47,7 +47,6 @@ def readCols(col,hoja):
         lista2.append(contador)
         lista.append(str(celda))
     return dict(zip(lista, lista2))
-
 ######### Other code
 while 1: # Infinite loop
     # Searches for a PICC
@@ -84,12 +83,11 @@ while 1: # Infinite loop
     # Assistance is recorded
     students_por_grado = readCols('A',sheet)
     row = students_por_grado.get(student)
-    contador = 1
-    row = row[1:]
-    for i in row:
-        if i != 'None':
-            contador = contador + 1
-    word = numToCol(contador)[0]
+    print(row)
+    word = ''.join(numToCol(2))
+    print(students_por_grado)
+    
+    # Write if the student is present or not
     if asistencia == True:
         sheet[f'{word}{row}'] = 'O'
         print(f'{word}{row}')
