@@ -48,7 +48,7 @@ def readCols(col,hoja):
         lista.append(str(celda))
     return dict(zip(lista, lista2))
 ######### Other code
-while 1: # Infinite loop
+while 1: # Attendance mode
     # Searches for a PICC
     print("Aproxima una tarjeta")
     uid = "4:C0:64:B2:5B:13:90" #Debugging
@@ -79,14 +79,20 @@ while 1: # Infinite loop
     else:
         print(f'El alumno {student} de {grado} llegó temprano')
         asistencia = True
-    ### WARNDING: ❗ THE NEXT CODE DOESNT WORK ALREADY ❗ ###
-    # Assistance is recorded
+    # Gets the actual row
     students_por_grado = readCols('A',sheet)
     row = students_por_grado.get(student)
-    print(row)
+    row = re.search(r'\d+', row).group()
     word = ''.join(numToCol(2))
-    print(students_por_grado)
     
+    # Get the actual column
+    day = time.strftime("%d/%m/%Y")
+    if sheet[f'B1'].value != day:
+        print('1')
+        print(sheet[f'B1'].value)
+    elif sheet[f'B1'].value == None:
+        print('2')
+    break
     # Write if the student is present or not
     if asistencia == True:
         sheet[f'{word}{row}'] = 'O'
