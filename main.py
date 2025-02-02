@@ -87,9 +87,9 @@ while 1: # Attendance mode
     
     # Get the actual column
     day = time.strftime("%d/%m/%Y")
+    isDate = '/'
     if sheet[f'B1'].value != day:
         print('1')
-        print(sheet[f'B1'].value)
     elif sheet[f'B1'].value == None:
         print('2')
     break
