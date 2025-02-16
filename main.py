@@ -15,7 +15,6 @@ config_sheet = wb['Ajustes']
 # i2c = busio.I2C(board.SCL, board.SDA)
 # pn532 = PN532_I2C(i2c)
 
-
 def numToCol(num):
     # This function turns any number to a excel column
     # Example: Input: 1 Output: A, Input: 4 Output: D
@@ -35,20 +34,25 @@ def numToCol(num):
         letter = Alphabet.get(num)
         x.append(letter)
         num = num - 26
-    return x
-def readCols(col,hoja):
-    # This function format the data in a dictionary with his cell
-    #  Data1:Cell, Data2:Cell, Data3:Cell
+    return ''.join(x)
+def readCols(col, hoja):
     lista = []
-    lista2 = []
-    for i in range (2,1000):
-        contador = (f"{col}{i}")
-        celda = hoja[contador].value
-        lista2.append(contador)
-        lista.append(str(celda))
-    return dict(zip(lista, lista2))
-######### Other code
+    for i in range(1, 1000):
+        celda = hoja.cell(row=i, column=col).value
+        if celda is None:
+            break
+        lista.append(celda)
+    return lista
+def readRows(row, hoja):
+    lista = []
+    for i in range(1, 1000):
+        celda = hoja.cell(row=row, column=i).value
+        if celda is None:
+            break
+        lista.append(celda)
+    return lista
 while 1: # Attendance mode
+
     # Searches for a PICC
     print("Aproxima una tarjeta")
     uid = "4:C0:64:B2:5B:13:90" #Debugging
@@ -70,7 +74,6 @@ while 1: # Attendance mode
     grado = config.studentList.get(uid).classroom
     sheet = wb[grado]
     # Checks and compares the actual time with the check-in time 
-    asistencia = False
     tiempoActual = time.localtime()
     localTime = tiempoActual.tm_hour
     if localTime >= config.entrada:
@@ -80,18 +83,16 @@ while 1: # Attendance mode
         print(f'El alumno {student} de {grado} llegó temprano')
         asistencia = True
     # Gets the actual row
-    students_por_grado = readCols('A',sheet)
-    row = students_por_grado.get(student)
+    students_por_grado = readCols(1,sheet)
+    row = students_por_grado.index(student) + 1
+    row = str(row)
     row = re.search(r'\d+', row).group()
-    word = ''.join(numToCol(2))
-    
     # Get the actual column
     day = time.strftime("%d/%m/%Y")
-    isDate = '/'
-    if sheet[f'B1'].value != day:
-        print('1')
-    elif sheet[f'B1'].value == None:
-        print('2')
+    days = readRows(1, sheet)
+    print(days)
+    
+
     break
     # Write if the student is present or not
     if asistencia == True:
