@@ -90,17 +90,16 @@ while 1: # Attendance mode
     # Get the actual column
     day = time.strftime("%d/%m/%Y")
     days = readRows(1, sheet)
-    print(days)
-    
+    col = days.index(day) + 1
+
+
 
     break
     # Write if the student is present or not
     if asistencia == True:
-        sheet[f'{word}{row}'] = 'O'
-        print(f'{word}{row}')
+        sheet.cell(row = int(row), column = col, value = 'O')
     else:
-        sheet[f'{word}{row}'] = 'X'
-        print(f'{word}{row}')
+        sheet.cell(row = int(row), column = col, value = 'X')
 
     # Save changes
     wb.save('ii.xlsx')
