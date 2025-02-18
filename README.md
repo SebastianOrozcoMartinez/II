@@ -10,8 +10,8 @@ Follow these steps to set up the project:
 Clone the repository or download it manually:
 
 ```sh
-git clone https://github.com/yourusername/ii-attendance.git
-cd ii-attendance
+git clone https://github.com/SebastianOrozcoMartinez/II.git
+cd II
 ```
 
 ### 2️⃣ Install dependencies  
@@ -48,7 +48,3 @@ When a student scans their card, their attendance will be marked automatically.
 ## 📜 License
 
 This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for more details.
-
----
-
-Made with ❤️ by [Your Name](https://github.com/yourusername)
