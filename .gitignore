@@ -1,0 +1,12 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtualenv
+venv/
+env/
+
+# System config
+.DS_Store
+*.log
