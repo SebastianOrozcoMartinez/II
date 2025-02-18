@@ -90,11 +90,15 @@ while 1: # Attendance mode
     # Get the actual column
     day = time.strftime("%d/%m/%Y")
     days = readRows(1, sheet)
-    col = days.index(day) + 1
-
-
-
-    break
+    # Check if the day is already in the sheet
+    if day not in days:
+        col = len(days)+1
+        sheet.cell(row = 1, column = len(days)+1, value = day)
+        wb.save('ii.xlsx')
+        print('El dia no estaba en la lista')
+        # Here is the problem, it doesn't update the days list until the program is restarted
+    else:
+        col = days.index(day) + 1
     # Write if the student is present or not
     if asistencia == True:
         sheet.cell(row = int(row), column = col, value = 'O')
