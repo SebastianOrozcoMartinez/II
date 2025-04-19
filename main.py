@@ -7,7 +7,9 @@ and saving his assistant in a Excel file
 # initialize variables and import libraries
 from openpyxl import load_workbook
 # from adafruit_pn532.i2c import PN532_I2C
-import time, re, config#, board, busio
+import time, re#, board, busio
+from config import student, studentList
+import config
 wb = load_workbook("ii.xlsx")
 data = wb['Hoja1']
 config_sheet = wb['Ajustes']
@@ -22,7 +24,7 @@ def numToCol(num):
         1 : 'A', 2 : 'B', 3 : 'C',
         4 : 'D', 5 : 'E', 6 : 'F',
         7 : 'G', 8 : 'H', 9 : 'I',
-        10 : 'J', 11 : 'K', 22 : 'L',
+        10 : 'J', 11 : 'K', 12 : 'L',
         13 : 'M', 14 : 'N', 15 : 'O',
         16 : 'P', 17 : 'Q', 18 : 'R',
         19 : 'S', 20 : 'T', 21 : 'U',
@@ -55,7 +57,7 @@ while 1: # Attendance mode
 
     # Searches for a PICC
     print("Aproxima una tarjeta")
-    uid = "4:C0:64:B2:5B:13:90" #Debugging
+    uid = input("debug ") # "4:C0:64:B2:5B:13:90"
     '''
     while uid is None:
         uid = pn532.read_passive_target()
@@ -66,12 +68,13 @@ while 1: # Attendance mode
             time.sleep(0.5)
     '''
     # Takes the UID and then checks if its on the list
-    student = config.studentList.get(uid).name
-    if student == 'None':
-        print('No se encontro el UID ⚠️')
+    student_obj = studentList.get(uid)
+    if student_obj is None:
+        print('No se encontró el UID ⚠️')
         continue
+    student = student_obj.name
     # Search for the classroom of the student
-    grado = config.studentList.get(uid).classroom
+    grado = student_obj.classroom
     sheet = wb[grado]
     # Checks and compares the actual time with the check-in time 
     tiempoActual = time.localtime()
@@ -85,8 +88,7 @@ while 1: # Attendance mode
     # Gets the actual row
     students_por_grado = readCols(1,sheet)
     row = students_por_grado.index(student) + 1
-    row = str(row)
-    row = re.search(r'\d+', row).group()
+    print(f"Actual row: {row}")
     # Get the actual column
     day = time.strftime("%d/%m/%Y")
     days = readRows(1, sheet)
@@ -95,17 +97,18 @@ while 1: # Attendance mode
         col = len(days)+1
         sheet.cell(row = 1, column = len(days)+1, value = day)
         wb.save('ii.xlsx')
+        days = readRows(1, sheet)
         print('El dia no estaba en la lista')
         # Here is the problem, it doesn't update the days list until the program is restarted
     else:
         col = days.index(day) + 1
+    print(f"Actual col: {col}")
     # Write if the student is present or not
     if asistencia == True:
-        sheet.cell(row = int(row), column = col, value = 'O')
+       sheet.cell(row = int(row), column = col, value = 'O')
     else:
         sheet.cell(row = int(row), column = col, value = 'X')
 
     # Save changes
     wb.save('ii.xlsx')
     print('Se ha registrado la asistencia')
-    break
