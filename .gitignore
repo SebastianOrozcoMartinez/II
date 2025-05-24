@@ -22,3 +22,6 @@ Thumbs.db
 # Project specific
 *.log
 .env
+# Office lock files
+.~lock.*#
+~
