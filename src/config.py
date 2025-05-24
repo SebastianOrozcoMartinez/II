@@ -6,7 +6,7 @@ class student:
 entrada = 7
 studentList = {
     "23:E3:71:F7" : student("Pepito","23:E3:71:F7","2do"),
-    "456" : student("Juan","456","3ro"),
+    "456" : student("Juan","456","3ero"),
     "789" : student("Luis","789","1ero A"),
     "4:C0:64:B2:5B:13:90" : student("Jaime","4:C0:64:B2:5B:13:90","1ero B"),
 }

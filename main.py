@@ -7,10 +7,10 @@ and saving his assistant in a Excel file
 # initialize variables and import libraries
 from openpyxl import load_workbook
 # from adafruit_pn532.i2c import PN532_I2C
-import time, re#, board, busio
-from config import student, studentList
-import config
-wb = load_workbook("ii.xlsx")
+import time, re, sys, os#, board, busio
+from src.config import student, studentList
+import src.config
+wb = load_workbook("./data/ii.xlsx")
 data = wb['Hoja1']
 config_sheet = wb['Ajustes']
 # Start I2C
@@ -79,7 +79,7 @@ while 1: # Attendance mode
     # Checks and compares the actual time with the check-in time 
     tiempoActual = time.localtime()
     localTime = tiempoActual.tm_hour
-    if localTime >= config.entrada:
+    if localTime >= src.config.entrada:
         print(f'El alumno {student} de {grado} llegó tarde')
         asistencia = False
     else:
@@ -87,6 +87,7 @@ while 1: # Attendance mode
         asistencia = True
     # Gets the actual row
     students_por_grado = readCols(1,sheet)
+    # Error: ValueError when a student isnt't in his classroom
     row = students_por_grado.index(student) + 1
     print(f"Actual row: {row}")
     # Get the actual column
@@ -99,7 +100,6 @@ while 1: # Attendance mode
         wb.save('ii.xlsx')
         days = readRows(1, sheet)
         print('El dia no estaba en la lista')
-        # Here is the problem, it doesn't update the days list until the program is restarted
     else:
         col = days.index(day) + 1
     print(f"Actual col: {col}")
@@ -110,5 +110,5 @@ while 1: # Attendance mode
         sheet.cell(row = int(row), column = col, value = 'X')
 
     # Save changes
-    wb.save('ii.xlsx')
+    wb.save('./data/ii.xlsx')
     print('Se ha registrado la asistencia')
