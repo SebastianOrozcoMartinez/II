@@ -1,13 +1,24 @@
-# Python cache
-__pycache__/
-*.py[cod]
-*.so
-
-# Virtualenv
+# Virtual environment
 venv/
 env/
 
-# System config
-.DS_Store
-*.logvenv/
+# Python cache files
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.log
+.env
