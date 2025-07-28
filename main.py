@@ -58,6 +58,9 @@ while 1: # Attendance mode
     # Searches for a PICC
     print("Aproxima una tarjeta")
     uid = input("debug ") # "4:C0:64:B2:5B:13:90"
+    if uid == "exit":
+        print("exitting")
+        exit
     '''
     while uid is None:
         uid = pn532.read_passive_target()
