@@ -8,7 +8,7 @@ and saving his assistant in a Excel file
 from openpyxl import load_workbook
 # from adafruit_pn532.i2c import PN532_I2C
 import time, re, sys, os#, board, busio
-from src.config import student, studentList
+from src.config import studentList
 import src.config
 wb = load_workbook("./data/ii.xlsx")
 data = wb['Hoja1']
@@ -16,6 +16,12 @@ config_sheet = wb['Ajustes']
 # Start I2C
 # i2c = busio.I2C(board.SCL, board.SDA)
 # pn532 = PN532_I2C(i2c)
+
+class student:
+    def __init__(self, name: str, uid: str, classroom: str):
+        self.name = name
+        self.uid = uid
+        self.classroom = classroom
 
 def numToCol(num):
     # This function turns any number to a excel column
@@ -37,6 +43,7 @@ def numToCol(num):
         x.append(letter)
         num = num - 26
     return ''.join(x)
+
 def readCols(col, hoja):
     lista = []
     for i in range(1, 1000):
@@ -45,6 +52,7 @@ def readCols(col, hoja):
             break
         lista.append(celda)
     return lista
+
 def readRows(row, hoja):
     lista = []
     for i in range(1, 1000):
@@ -53,8 +61,8 @@ def readRows(row, hoja):
             break
         lista.append(celda)
     return lista
-while 1: # Attendance mode
 
+while 1: # Attendance mode
     # Searches for a PICC
     print("Aproxima una tarjeta")
     uid = input("debug ") # "4:C0:64:B2:5B:13:90"
@@ -115,3 +123,4 @@ while 1: # Attendance mode
     # Save changes
     wb.save('./data/ii.xlsx')
     print('Se ha registrado la asistencia')
+    break
